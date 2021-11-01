@@ -4,6 +4,7 @@ public class Library {
     public static void main (String[] args){
         Book [] bookArray = new Book [3];
         Reader [] readerArray = new Reader [3];
+        int i;
         int j = bookArray.length;
         String [] books = new String [j];
 
@@ -43,22 +44,29 @@ public class Library {
         readerArray[2].setPhoneNumber("+38(068)452-11-30");
         readerArray[2].setTicketNumber(2516);
 
-        for (int i=0;i<readerArray.length;i++){
+        System.out.println("Список читателей:");
+        for (i=0;i<readerArray.length;i++){
             System.out.println(readerArray[i].getInfo());
         }
 
-        for (int i=0;i<bookArray.length;i++){
+        System.out.println();
+        System.out.println("Список книг:");
+        for (i=0;i<bookArray.length;i++){
             System.out.println(bookArray[i].getInfo());
         }
 
+        System.out.println();
+        System.out.println("Демострация работы метода takeBook()");
         readerArray[1].takeBook(3);
-        for (int i=0;i<bookArray.length;i++){
+        for (i=0;i<bookArray.length;i++){
             books[i] = bookArray[i].getBookName();
         }
         readerArray[1].takeBook(books);
         readerArray[1].takeBook(bookArray);
 
         System.out.println();
+        System.out.println();
+        System.out.println("Демострация работы метода returnBook()");
         readerArray[1].returnBook(3);
         readerArray[1].returnBook(books);
         readerArray[1].returnBook(bookArray);

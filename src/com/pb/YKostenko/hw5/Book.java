@@ -11,14 +11,6 @@ public class Book {
         return bookName;
     }
 
-    public String getAutorBook() {
-        return autorBook;
-    }
-
-    public int getYearBook() {
-        return yearBook;
-    }
-
     public String getInfo() {
         return bookName + "(" + autorBook + " " + yearBook + ")";
     }

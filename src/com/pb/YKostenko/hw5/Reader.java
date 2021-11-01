@@ -7,8 +7,6 @@ public class Reader {
     private String bDate;
     private String phoneNumber;
 
-
-
     public void takeBook (int count){
         System.out.println (fio + " взял " + count + " книги");
     }
@@ -58,27 +56,10 @@ public class Reader {
             }
         }
     }
-    public String getfio() {
-        return fio;
-    }
+
     public String getInfo(){
         return "ФИО: " + fio + " номер читательского билета: " + ticketNumber +
                 " факультет: " + faculty + " дата рождения: " + bDate + " phoneNumber: " + phoneNumber;
-    }
-    public int getTicketNumber() {
-        return ticketNumber;
-    }
-
-    public String getFaculty() {
-        return faculty;
-    }
-
-    public String getBDate() {
-        return bDate;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public void setFio(String fio) {
