@@ -12,17 +12,27 @@ public class OnlineShop {
         String password = enterString();
         System.out.println ("Подтвердите пароль:");
         String confirmPassword = enterString();
-
-        user.signUp(login, password, confirmPassword);
-
+        try {
+            user.signUp(login, password, confirmPassword);
+        }
+        catch (WrongLoginException e) {
+            System.out.println("Login должен содержать только латинские буквы и цифры");
+        }
+        catch (WrongPasswordException i){
+            System.out.println("Password должен содержать только латинские буквы и цифры");
+        }
         System.out.println ("Для входа");
         System.out.println ("Введите логин:");
         login = enterString();
         System.out.println ("Введите пароль:");
         password = enterString();
 
-        user.signIn(login, password);
-
+        try {
+            user.signIn(login, password);
+        }
+        catch (WrongLoginException f){
+            System.out.println("Неверно введен логин или пароль.");
+        }
     }
 
     static String enterString (){
