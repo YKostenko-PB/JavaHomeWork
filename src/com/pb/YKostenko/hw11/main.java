@@ -1,8 +1,9 @@
 package com.pb.YKostenko.hw11;
 
+
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -17,66 +18,111 @@ import java.util.Comparator;
 public class main {
     public static void main(String[] args) throws Exception {
         File file = Paths.get("files/person.data").toFile();
-        FileOutputStream outputStream = new FileOutputStream(file);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         FileInputStream fileInputStream = new FileInputStream(file);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         List<PhoneBook> phoneBookArray = new ArrayList<>();
-        PhoneBook phoneBook = new PhoneBook("Ivan","Dnepr",LocalDate.of(2000, 2, 12),"0666646706");
-        phoneBook.addPhone("098567812");
-        phoneBookArray.add(phoneBook);
-        phoneBookArray.add(new PhoneBook("Ivan","Kiev",LocalDate.of(1992, 5, 15),"0506686706"));
-        phoneBookArray.add(new PhoneBook("Petr","Kiev",LocalDate.of(1989, 8, 20),"0506690706"));
-        phoneBookArray.add(new PhoneBook("Semen","Dnepr",LocalDate.of(1990, 5, 15),"0676120706"));
-        System.out.println("Начальный список:");
-        System.out.println(phoneBookArray);
-        System.out.println("Поиск по ФИО");
-        phoneBookArray.forEach(new Consumer<PhoneBook>(){
-            @Override
-            public void accept(PhoneBook s){
-                if (s.getName().equals("Ivan")){
-                    System.out.println(s.toString());
-                }
-            }
-        });
-        System.out.println("Поиск по адресу");
-        phoneBookArray.forEach(new Consumer<PhoneBook>(){
-                    @Override
-                    public void accept(PhoneBook s){
-
-                        if (s.getAddress().equals("Kiev")){
-                            System.out.println(s.toString());
+        PhoneBook phoneBook = new PhoneBook();
+        Scanner scan = new Scanner(System.in);
+        int i = 1;
+        int count = 0;
+        while (i > 0) {
+            System.out.println("Телефонная книга");
+            System.out.println("Выберите действие:");
+            System.out.println("1 - Добавить запись;");
+            System.out.println("2 - Удалить запись;");
+            System.out.println("3 - Поиск записи;");
+            System.out.println("4 - Сортировать записи и вывести на экран;");
+            System.out.println("5 - Изменить запись;");
+            System.out.println("6 - Сохранить записи в файл;");
+            System.out.println("7 - Загрузить записи из файла;");
+            System.out.println("0 - Завершить выполнение программы;");
+            String option = scan.nextLine();
+            switch (option) {
+                case "1":
+                    phoneBookArray.add(new PhoneBook());
+                    phoneBookArray.set(count, phoneBook.addPerson());
+                    count++;
+                    break;
+                case "2":
+                    System.out.println("Введите имя эелемента, который нужно удалить:");
+                    String option1 = scan.nextLine();
+                    phoneBookArray.removeIf(new Predicate<PhoneBook>() {
+                        @Override
+                        public boolean test(PhoneBook s) {
+                            return option1.equals(s.getName());
                         }
+
+                    });
+                    count--;
+                    break;
+                case "3":
+                    System.out.println("Введите имя эелемента, который нужно найти:");
+                    option1 = scan.nextLine();
+                    phoneBookArray.forEach(new Consumer<PhoneBook>() {
+                        @Override
+                        public void accept(PhoneBook s) {
+                            if (s.getName().equals(option1)) {
+                                System.out.println(s.toString());
+                            }
+                        }
+                    });
+                    break;
+                case "4":
+                    System.out.println("1 - Сортировать по имени;");
+                    System.out.println("2 - Сортировать по адресу;");
+                    option1 = scan.nextLine();
+                    switch (option1) {
+                        case "1":
+                            System.out.println("Cортированый список:");
+                            phoneBookArray.sort(Comparator.comparing(p -> p.name));
+                            System.out.println(phoneBookArray);
+                            break;
+                        case "2":
+                            System.out.println("Cортированый список:");
+                            phoneBookArray.sort(Comparator.comparing(p -> p.address));
+                            System.out.println(phoneBookArray);
+                            break;
+                        default:
+                            System.out.println("Неверный ввод");
                     }
-                }
-        );
-        phoneBookArray.replaceAll( new UnaryOperator<PhoneBook>(){
-            @Override
-            public PhoneBook apply(PhoneBook s) {
-                if (s.getName().equals("Ivan") && s.getAddress().equals("Dnepr")){
-                    s.setName("Vano");
-                    s.setAddress("Odessa");
-                }
-                return s;
+                    break;
+                case "5":
+                    System.out.println("Какое имя нужно заменить?");
+                    option1 = scan.nextLine();
+                    System.out.println("На какое имя заменить?");
+                    String option2 = scan.nextLine();
+                    phoneBookArray.replaceAll(
+                        new UnaryOperator<PhoneBook>() {
+                            @Override
+                            public PhoneBook apply(PhoneBook s) {
+                                if (s.getName().equals(option1)){
+                                    s.setName(option2);
+                                }
+                                return s;
+                            }
+                        }
+                );
+                    break;
+                case "6":
+                    FileOutputStream outputStream = new FileOutputStream(file);
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                    objectOutputStream.writeObject(phoneBookArray);
+                    objectOutputStream.close();
+                    System.out.println("Данные записаны в файл");
+                    break;
+                case "7":
+                    phoneBookArray = (List<PhoneBook>) objectInputStream.readObject();
+                    System.out.println("Данные считанные из файла.");
+                    System.out.println("Список после загрузки из файла:");
+                    System.out.println(phoneBookArray);
+                    break;
+                case "0":
+                    i = 0;
+                    break;
+                default:
+                    System.out.println("Неверный ввод");
             }
-            }
-        );
-        phoneBookArray.removeIf(new Predicate<PhoneBook>() {
-            @Override
-            public boolean test(PhoneBook s) {
-                return "Semen".equals(s.getName());
-            }
-        });
-        System.out.println("Список после редактирования:");
-        System.out.println(phoneBookArray);
-        objectOutputStream.writeObject(phoneBookArray);
-        objectOutputStream.close();
-        ArrayList<PhoneBook> favorite = new ArrayList<>();
-        phoneBookArray.clear();
-        System.out.println("Список после очистки:");
-        System.out.println(phoneBookArray);
-       phoneBookArray = (List<PhoneBook>) objectInputStream.readObject();
-        System.out.println("Список после загрузки из файла:");
-       System.out.println(phoneBookArray);
+        }
     }
+
 }
