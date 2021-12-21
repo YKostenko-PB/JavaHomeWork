@@ -1,6 +1,8 @@
 package com.pb.YKostenko.hw11;
 
-
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,26 +48,19 @@ public class main {
                 case "2":
                     System.out.println("Введите имя эелемента, который нужно удалить:");
                     String option1 = scan.nextLine();
+
                     phoneBookArray.removeIf(new Predicate<PhoneBook>() {
-                        @Override
+                      @Override
                         public boolean test(PhoneBook s) {
                             return option1.equals(s.getName());
                         }
-
                     });
                     count--;
                     break;
                 case "3":
                     System.out.println("Введите имя эелемента, который нужно найти:");
                     option1 = scan.nextLine();
-                    phoneBookArray.forEach(new Consumer<PhoneBook>() {
-                        @Override
-                        public void accept(PhoneBook s) {
-                            if (s.getName().equals(option1)) {
-                                System.out.println(s.toString());
-                            }
-                        }
-                    });
+                    phoneBookArray.stream().filter(x -> x.getName().equals(option1)).forEach(System.out::println);
                     break;
                 case "4":
                     System.out.println("1 - Сортировать по имени;");
@@ -73,14 +68,10 @@ public class main {
                     option1 = scan.nextLine();
                     switch (option1) {
                         case "1":
-                            System.out.println("Cортированый список:");
-                            phoneBookArray.sort(Comparator.comparing(p -> p.name));
-                            System.out.println(phoneBookArray);
+                            phoneBookArray.stream().sorted(Comparator.comparing(PhoneBook ::getName)).forEach(System.out::println);
                             break;
                         case "2":
-                            System.out.println("Cортированый список:");
-                            phoneBookArray.sort(Comparator.comparing(p -> p.address));
-                            System.out.println(phoneBookArray);
+                            phoneBookArray.stream().sorted(Comparator.comparing(PhoneBook ::getAddress)).forEach(System.out::println);
                             break;
                         default:
                             System.out.println("Неверный ввод");
@@ -91,6 +82,9 @@ public class main {
                     option1 = scan.nextLine();
                     System.out.println("На какое имя заменить?");
                     String option2 = scan.nextLine();
+                   // phoneBookArray = Stream.of(phoneBookArray).map(x -> {if (x.getName().equals(option1)){
+                      //  x.setName(option2);});
+                    //phoneBookArray.stream().filter(x -> x.getName().equals(option1)).r();
                     phoneBookArray.replaceAll(
                         new UnaryOperator<PhoneBook>() {
                             @Override
