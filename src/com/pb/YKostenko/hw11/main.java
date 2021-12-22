@@ -82,9 +82,6 @@ public class main {
                     option1 = scan.nextLine();
                     System.out.println("На какое имя заменить?");
                     String option2 = scan.nextLine();
-                   // phoneBookArray = Stream.of(phoneBookArray).map(x -> {if (x.getName().equals(option1)){
-                      //  x.setName(option2);});
-                    //phoneBookArray.stream().filter(x -> x.getName().equals(option1)).r();
                     phoneBookArray.replaceAll(
                         new UnaryOperator<PhoneBook>() {
                             @Override
