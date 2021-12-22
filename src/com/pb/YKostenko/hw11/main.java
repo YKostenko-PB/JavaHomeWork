@@ -1,14 +1,9 @@
 package com.pb.YKostenko.hw11;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -26,7 +21,6 @@ public class main {
         PhoneBook phoneBook = new PhoneBook();
         Scanner scan = new Scanner(System.in);
         int i = 1;
-        int count = 0;
         while (i > 0) {
             System.out.println("Телефонная книга");
             System.out.println("Выберите действие:");
@@ -42,20 +36,12 @@ public class main {
             switch (option) {
                 case "1":
                     phoneBookArray.add(new PhoneBook());
-                    phoneBookArray.set(count, phoneBook.addPerson());
-                    count++;
+                    phoneBookArray.set(phoneBookArray.size()-1, phoneBook.addPerson());
                     break;
                 case "2":
                     System.out.println("Введите имя эелемента, который нужно удалить:");
                     String option1 = scan.nextLine();
-
-                    phoneBookArray.removeIf(new Predicate<PhoneBook>() {
-                      @Override
-                        public boolean test(PhoneBook s) {
-                            return option1.equals(s.getName());
-                        }
-                    });
-                    count--;
+                    phoneBookArray.removeIf(x -> x.getName().equals(option1));
                     break;
                 case "3":
                     System.out.println("Введите имя эелемента, который нужно найти:");
@@ -82,17 +68,10 @@ public class main {
                     option1 = scan.nextLine();
                     System.out.println("На какое имя заменить?");
                     String option2 = scan.nextLine();
-                    phoneBookArray.replaceAll(
-                        new UnaryOperator<PhoneBook>() {
-                            @Override
-                            public PhoneBook apply(PhoneBook s) {
-                                if (s.getName().equals(option1)){
-                                    s.setName(option2);
-                                }
-                                return s;
-                            }
-                        }
-                );
+                    phoneBookArray.stream()
+                            .filter(x -> x.getName().equals(option1))
+                            .forEach(x -> {x.setName(option2);
+                            x.timeOfChange = LocalDateTime.now();});
                     break;
                 case "6":
                     FileOutputStream outputStream = new FileOutputStream(file);
